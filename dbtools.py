@@ -60,6 +60,33 @@ class NIDDatabase:
         for cLibraryName, cLibrary in self.libraries():
             for lLibraryName, lLibrary in nids_lookup.findLibrary(cLibraryName):
                 self.setLibraryNid(cLibrary, lLibrary["nid"])
+    
+    def mergeList(self, nids_lookup, nids_txt):
+        fnids_txt = open(nids_txt)
+        for entry in fnids_txt:
+            nid, function_name = tuple(filter(None, entry.split(' ')))
+            nid = int(nid, 0)
+
+            moduleName, module, libraryName, library = nids_lookup.findFunctionByNid(nid)
+            libraryName = re.sub('User$', '', libraryName) 
+
+            db_module = None
+            for cModuleName, cModule in self.findModule(module):
+                db_module = cModule
+            
+            if not db_module:
+                db_module = self.addModule(moduleName, module["nid"])
+            db_library = None
+            for cLibraryName, cLibrary in self.findLibrary(libraryName, module)
+                db_library = cLibrary
+
+            if not db_library:
+                db_library = self.addLibrary(db_module, libraryName, library["nid"])
+                self.setLibraryKernel(db_library, module["kernel"])
+            
+            db_function = None
+            for 
+            
 
     def setModuleNid(self, module, nid):
         #for _, cModule in self.findModule(module):
@@ -71,6 +98,11 @@ class NIDDatabase:
 
     def setLibraryKernel(self, library, kernel):
         library["kernel"] = kernel
+    
+    def soundsKernel(self, library):
+        if library.endswith(("ForKernel", "ForDriver")):
+            return True
+        return False
 
     def addModule(self, name, nid):
         try:
@@ -97,6 +129,8 @@ class NIDDatabase:
             return
 
     def addLibrary(self, module, name, nid):
+        # db.yml never has a User suffix
+        name = re.sub('User$', '', name) 
         try:
             self.findLibrary(name, module) # Does not raise exception if library already exists
             setLibraryNid(name, nid, module)
@@ -158,8 +192,17 @@ class NIDDatabase:
 
     def findLibrary(self, library, module=None):
         for cLibraryName, cLibrary in self.libraries(module):
-            if cLibraryName == library:
+            # User libraries are suffixed with 'User' but this suffix is not in db.yml
+            if cLibraryName == library or cLibraryName == library + "User" :
                 yield (cLibraryName, cLibrary)
+    def findFunctionByNid(self, nid):
+        for cModuleName, cModule in self.modules():
+            for cLibraryName, cLibrary in self.libraries(cModule):
+                funcs = cLibrary["functions"]:
+                for func in funcs:
+                    if int(funcs[func], 0) == nid:
+                        return cModuleName, cModule, cLibraryName, cLibrary
+                    
 if __name__ == "__main__":
     if argv[1] == "fixnids":
         db = NIDDatabase("db.yml")

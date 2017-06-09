@@ -58,8 +58,10 @@ for line in compact_exports:
 
         library = db_lookup.addLibrary(module, library_name, nid)
         
-        if syscall:
-            db_lookup.setLibraryKernel(library, syscall)
+        if not syscall and db_lookup.soundsKernel(library_name):
+            db_lookup.setLibraryKernel(library, True)
+        else:
+            db_lookup.setLibraryKernel(library, False)
     elif keyword == "function":
         nid = int(splt[1], 0)
         name = library_name + "_" + hex(nid)[2:].upper().zfill(8)
