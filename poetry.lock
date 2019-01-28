@@ -1,0 +1,95 @@
+[[package]]
+category = "main"
+description = "Screen-scraping library"
+name = "beautifulsoup4"
+optional = false
+python-versions = "*"
+version = "4.7.1"
+
+[package.dependencies]
+soupsieve = ">=1.2"
+
+[[package]]
+category = "main"
+description = "Python package for providing Mozilla's CA Bundle."
+name = "certifi"
+optional = false
+python-versions = "*"
+version = "2018.11.29"
+
+[[package]]
+category = "main"
+description = "Universal encoding detector for Python 2 and 3"
+name = "chardet"
+optional = false
+python-versions = "*"
+version = "3.0.4"
+
+[[package]]
+category = "main"
+description = "Internationalized Domain Names in Applications (IDNA)"
+name = "idna"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "2.8"
+
+[[package]]
+category = "main"
+description = "Alternative regular expression module, to replace re."
+name = "regex"
+optional = false
+python-versions = "*"
+version = "2019.01.24"
+
+[[package]]
+category = "main"
+description = "Python HTTP for Humans."
+name = "requests"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "2.21.0"
+
+[package.dependencies]
+certifi = ">=2017.4.17"
+chardet = ">=3.0.2,<3.1.0"
+idna = ">=2.5,<2.9"
+urllib3 = ">=1.21.1,<1.25"
+
+[[package]]
+category = "main"
+description = "ruamel.yaml is a YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order"
+name = "ruamel.yaml"
+optional = false
+python-versions = "*"
+version = "0.15.87"
+
+[[package]]
+category = "main"
+description = "A CSS4 selector implementation for Beautiful Soup."
+name = "soupsieve"
+optional = false
+python-versions = "*"
+version = "1.7.3"
+
+[[package]]
+category = "main"
+description = "HTTP library with thread-safe connection pooling, file post, and more."
+name = "urllib3"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4"
+version = "1.24.1"
+
+[metadata]
+content-hash = "59cc3b7f4aa064f74bd3cf1d6bb7dafb2644a25b2fbecff0f824f509631d7d6c"
+python-versions = "^3.7"
+
+[metadata.hashes]
+beautifulsoup4 = ["034740f6cb549b4e932ae1ab975581e6103ac8f942200a0e9759065984391858", "945065979fb8529dd2f37dbb58f00b661bdbcbebf954f93b32fdf5263ef35348", "ba6d5c59906a85ac23dadfe5c88deaf3e179ef565f4898671253e50a78680718"]
+certifi = ["47f9c83ef4c0c621eaef743f133f09fa8a74a9b75f037e8624f83bd1b6626cb7", "993f830721089fef441cdfeb4b2c8c9df86f0c63239f06bd025a76a7daddb033"]
+chardet = ["84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae", "fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"]
+idna = ["c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407", "ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"]
+regex = ["0bcd8ab8c812278981df3161db3f94f0ec72f1fa07020173c96f20e74bd7c16a", "20b1601b887e1073805adda2f8a09bb4c86dc7629c46c0d7bf28444dcb32920d", "3c4327dd686d2e05b1b3d60a256fbf1c93c53001614ed8acd65453e09d40e10f", "5e8c6cef2cd964888d5fdf16f3db3dbaaa18c5c5c648161c52c8df065cc26ac5", "666b03b1c33ef8105f28ecf0fd26f4480931a91a6e30e29e304c1d9eddce2209", "8afb6ecd80154464b1ad31a93228b63832526f9b0291a82a55287ae15c01de79", "9326e1c5b9de6e74150bdd424789aecec41c7ecaf9e78bf4c3acfe6868ce1365", "e06eac198d9c76bcbe52b987b74ead0d353cfaa9f3d8cd907ec984f4bb20ea1e", "eee007ee39a02cb631b74f89f992766b9d7e952a750166f3e5a5baf8c328c070"]
+requests = ["502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e", "7bf2a778576d825600030a110f3c0e3e8edc51dfaafe1c146e39a2027784957b"]
+"ruamel.yaml" = ["18078354bfcf00d51bcc17984aded80840379aed36036f078479e191b59bc059", "211e6ef2530f44fc3197c713892678e7fbfbc40a1db6741179d6981514be1674", "2e8f7cee12a2372cec4480fe81086b1fdab163f4b56e58b5592a105c52973b78", "48cc8e948a7ec4917bf94adff2cc1255e98f1eef5e1961889886acc4ff3a7194", "4a0c7f970aa0e30bc541f690fbd14aca19de1cab70787180de5083b902ec40b5", "5dd0ea7c5c703e8675f3caf2898a50b4dadaa52838f8e104637a452a05e03030", "612fb4833f1978ceb7fd7a24d86a5ebd103bcc408394f3af621293194658cf1b", "61c421a7a2b8e2886a94fbe29866df6b99451998abaa1584b9fdc9c10c33e40b", "6483416847980aa7090b697d177a8754c4f340683cc84abd38da7b850826687d", "6622f3b0cae7ed6fe5d3d6a6d8d8cb9413a05b408d69a789a57b77a616bb6562", "80b2acde0d1b9d25e5c041960a9149480c15c6d9f4c24b8ddb381b14e9e70ea4", "8f9ed94be17f306485df8fd0274a30f130a73f127798657d4dc65b1f89ec7a36", "9a6b94cc9b6e738036426498ac9fe8ca05afea4249fb9dec1be32ce4823d5756", "a4b11dfe421a9836c723107a4ccc9cab9674de611ba60b8212e85526ea8bf254", "a55e55c6ecb5725ba472f9b811940e8d258a32fb36f5793dbc38582d6f377f3f", "a736ab1d8c2d5566254a1a2ee38e7c5460520bcccd4a8f0feb25a4463735e5a7", "c29d0a3cffa5a25f5259bfeac06ffdc5e7d1fd38a0a26a6664d160192730434f", "c33458217a8c352b59c86065c4f05f3f1ac28b01c3e1a422845c306237446bf3", "cc9bd3c3fa8a928f7b6e19fe8de13a61deb91f257eccbe0d16114ce8c54cdc81", "d63b7c828a7358ce5b03a3e2c2a3e5a7058a954f8919334cb09b3d8541d1fff6", "fbd301680a3563e84d667042dac1c5d50ef402ecf1f4b1763507a6877b8181ad", "fc67e79e2f5083be6fd1000c4646e13a891585772a503f56f51f845b547fe621"]
+soupsieve = ["466910df7561796a60748826781ebe9a888f7a1668a636ae86783f44d10aae73", "87db12ae79194f0ff9808d2b1641c4f031ae39ffa3cab6b907ea7c1e5e5ed445"]
+urllib3 = ["61bf29cada3fc2fbefad4fdf059ea4bd1b4a86d2b6d15e1c7c0b582b9752fe39", "de9529817c93f27c8ccbfead6985011db27bd0ddfcdb2d86f3f663385c6a9c22"]
