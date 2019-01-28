@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+from typing import List
+
 from bs4 import BeautifulSoup as bs
 import requests
 import regex as re
@@ -6,6 +9,46 @@ WIKI_BASE_URL = "https://wiki.henkaku.xyz"
 WIKI_MODULES_URL = WIKI_BASE_URL + "/vita/Modules"
 
 C_VALID_IDENTIFIER_REGEX = re.compile(r"^[^\d\W]\w*\Z", re.UNICODE)
+VALID_NID_REGEX = re.compile(r"0x[0-9A-Fa-f]{4,8}", re.UNICODE)
+
+
+@dataclass
+class NID:
+    value: int
+
+    def __init__(self, nid: str):
+        if re.match(r"0x[0-9a-fA-F]{5,8}", nid) is None:
+            raise Exception("Invalid NID format")
+
+        self.value = int(nid)
+
+
+@dataclass
+class Function:
+    nid: NID
+    name: str
+
+    def __init__(self, nid, name):
+        self.nid = NID(nid)
+
+        if VALID_NID_REGEX.match(name) is None:
+            raise Exception("Invalid function name")
+
+        self.name = name
+
+
+@dataclass
+class Library:
+    kernel: bool
+    nid: NID
+    functions: List[Function]
+
+
+@dataclass
+class Module:
+    nid: NID
+    libraries: List[Library]
+
 
 def fetch_module_urls():
     print('\n==> Step1: fetch module urls...')
@@ -29,7 +72,7 @@ def fetch_module_urls():
 
         # Non-existing wiki page
         if link_tag.has_attr('class') and link_tag['class'][0]  == 'new':
-            print("[warning] Module", link_tag.text, "does not have an associated article.")
+            print("[note] Module", link_tag.text, "does not have an associated article.")
             continue
 
         link = WIKI_BASE_URL + link_tag['href']
@@ -180,7 +223,7 @@ def extract_nids(modules):
             
             functions_list = []
 
-            functions = library_section.find_all_next(['h2','h3'])
+            functions = library_section.find_all_next(['h2', 'h3'])
             
             for function in functions:
                 # This is next library section
@@ -197,9 +240,9 @@ def extract_nids(modules):
                 # FIXME Check that function name is a valid C-function name
 
                 function_table = function.find_next(
-                    ['table', 'h2'], class_='wikitable')
-                if function_table.name == 'h2':
-                    print('[error] Function', function_name, 'NID table', 'cannot be found')
+                    ['table', 'h2', 'h3'])
+                if function_table.name in ['h2', 'h3']:
+                    print('[error] Function', function_name, 'NID table', 'cannot be found, skipping...')
                     continue
 
                 function_nid_entries = function_table.tbody.find_all("tr")
