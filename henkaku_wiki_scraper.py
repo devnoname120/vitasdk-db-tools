@@ -1,9 +1,10 @@
+import sys
 from dataclasses import dataclass
 from typing import List
 
-from bs4 import BeautifulSoup as bs
-import requests
 import regex as re
+import requests
+from bs4 import BeautifulSoup as bs, NavigableString
 
 WIKI_BASE_URL = "https://wiki.henkaku.xyz"
 WIKI_MODULES_URL = WIKI_BASE_URL + "/vita/Modules"
@@ -239,9 +240,11 @@ def extract_nids(modules):
 
                 # FIXME Check that function name is a valid C-function name
 
-                function_table = function.find_next(
-                    ['table', 'h2', 'h3'])
-                if function_table.name in ['h2', 'h3']:
+                function_table = function.next_sibling
+
+                # function_table = function.find_next(
+                #     ['table', 'h2', 'h3'])
+                if function_table.name != 'table':
                     print('[error] Function', function_name, 'NID table', 'cannot be found, skipping...')
                     continue
 
@@ -300,16 +303,82 @@ def extract_nids(modules):
                 print('-', n[0], ':', n[1]) 
 
 
+def extract_functions_only():
+    # print('\n==> Step1: fetch module urls...')
 
-                    
+    modules_page = requests.get(WIKI_MODULES_URL)
+    modules_soup = bs(modules_page.text, "html.parser")
+
+    module_list = modules_soup.find_all('a')
+
+    for module in module_list:
+        if module.has_attr('class') and module['class'][0] == 'new' or not module.has_attr('href'):
+            continue # Ignore non-existent wiki page
+
+        try:
+            module_page = requests.get(WIKI_BASE_URL + module['href'])
+        except:
+            print("[error] Cannot establish connection to", WIKI_BASE_URL + module['href'], 'skipping...', file=sys.stderr)
+            continue
+        module_soup = bs(module_page.text, "html.parser")
+
+        tables = module_soup.find_all('table')
+
+        for table in tables:
+            first_table_tbody = table.tbody
+
+            if first_table_tbody is None:
+                print("[warning] Unknown table format of size", len(th), "in:", module['href'], first_tr.text,
+                      file=sys.stderr)
+                continue
+
+            first_tr = first_table_tbody.find('tr')
+            th = first_tr.find_all('th')
+
+            if len(th) == 2 and th[0].text.strip() == "Version" and th[1].text.strip() == "NID":
+                nid_index = 1
+            elif len(th) == 3 and th[0].text.strip() == "Version" and th[1].text.strip() == "World" and th[2].text.strip() == "NID":
+                nid_index = 2
+            else:
+                print("[warning] Unknown table format of size", len(th), "in:", module['href'], first_tr.text, file=sys.stderr)
+                continue # Dunno about this thing
+
+            name = table.previous_sibling
+
+            # Get rid of whitespace
+            while isinstance(name, NavigableString):
+                name = name.previous_sibling
+
+            if name.name != 'h3':
+                print("[error] Bad header in ", module['href'],":", name.name, table, file=sys.stderr)
+                continue
 
 
+            function_name = name.find('span', class_='mw-headline').text
 
+            nid_entries = first_tr.next_siblings
 
-        
-    
+            for nid_entry in nid_entries:
+                if isinstance(nid_entry, NavigableString):
+                    continue # Ignore whitespace
 
+                text_nid = nid_entry.find_all('td')[nid_index].text.strip()
+                try:
+                    nid = int(text_nid, 0)
+                except:
+                    print("[error] Bad NID in", module['href'], "for function", function_name, ":", text_nid, file=sys.stderr)
+                    continue # Parse error, this nid is garbage
+
+                if C_VALID_IDENTIFIER_REGEX.match(function_name) is None:
+                    print('[error] Invalid function identifier:', function_name, ', skipping...', file=sys.stderr)
+                    continue
+                print(function_name, '0x{:08X}'.format(nid))
 
 if __name__ == "__main__":
-    modules = fetch_module_urls()
-    extract_nids(modules)
+    if sys.argv[1] == "proper":  # Not finished
+        modules = fetch_module_urls()
+        extract_nids(modules)
+
+    if sys.argv[1] == "aggressive":  # Gets everything that looks like a function NID table
+        # In order to use this, you need to redirect stdout somewhere (e.g. nids.txt_), or stderr will be tangled
+        extract_functions_only()
