@@ -71,7 +71,7 @@ def fetch_module_urls():
         link_tag = module_entry.td.find('a')
 
         # Non-existing wiki page
-        if link_tag.has_attr('class') and link_tag['class'][0]  == 'new':
+        if link_tag.has_attr('class') and link_tag['class'][0] == 'new':
             print("[note] Module", link_tag.text, "does not have an associated article.")
             continue
 
